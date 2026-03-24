@@ -1,0 +1,48 @@
+SystemCtl Applications to Run on Server with Website:
+NGINX - handles routing and traffic control
+Is a high-performance web server and reverse proxy used to serve websites and manage traffic between clients (like browsers) and backend applications. 
+1.) Web Server
+-serves static files like HTML, CSS, javascript, images. (Ex: delivering the React/Vite frontend build to users)
+2.) Reverse Proxy
+- sits in front of backend (like Node.js/Express) & forwards request to app running on another port (ex: 3000)
+3.) Load Balancer
+- distributes traffic across multiple backend servers
+- helps scale apps and prevent overload
+4.) SSL/TLS Handler (HTTPS)
+- manages HTTPS encryption using certificates
+- often used with tools like Lets Encrypt
+
+PM2 -> Program Manager
+postgresql -> Database
+
+
+
+
+postgresql | postgresql-contrib
+
+On Ubuntu/Linux:
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+Start it:
+sudo systemctl start postgresql
+
+Check it:
+sudo systemctl status postgresql
+
+Switch to Postgres-User:
+sudo -i -u postgres
+psql
+
+Inside psql - Get started with creating myuser:
+CREATE DATABASE myapp;
+CREATE USER myuser WITH PASSWORD 'mypassword';
+ALTER ROLE myuser SET client_encoding TO 'utf8';
+ALTER ROLE myuser SET default_transaction_isolation TO 'read committed';
+ALTER ROLE myuser SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE myapp TO myuser;
+
+Exit psql:
+\q
+exit
+

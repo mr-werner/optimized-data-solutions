@@ -3,7 +3,8 @@ const path = require('path');
 const authMiddleware = require('./middleware/authMiddleware');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-require('dotenv').config({path: '../.env'});
+const pool = require('./db');
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
@@ -78,9 +79,17 @@ app.get('/api/protected', authMiddleware, (req, res) => {
 });
 
 //Test API services
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working 🚀' });
+app.get('/api/test', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
 });
+
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
 // Start server
 app.listen(PORT, () => {

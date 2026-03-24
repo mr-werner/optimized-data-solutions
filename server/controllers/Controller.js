@@ -1,43 +1,53 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
+//const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
+const pool = require('./db');
+
+module.exports = pool;
+
+exports.testDB = async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'DB test failed' });
+  }
+};
 
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const saltRounds = 10;
+    const hashedPassword = await argon2.hash(password);
 
-    // 🔐 HASH PASSWORD HERE
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const result = await pool.query(
+      'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email',
+      [email, hashedPassword]
+    );
 
-    const newUser = new User({
-      email,
-      password: hashedPassword
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ message: 'User created' });
+    res.status(201).json(result.rows[0]);
 
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// 📍 SAME FILE: server/controllers/Controller.js
-
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const result = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+
+    const user = result.rows[0];
 
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
 
-    // 🔍 COMPARE (DO NOT HASH HERE)
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await argon2.verify(user.password, password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
