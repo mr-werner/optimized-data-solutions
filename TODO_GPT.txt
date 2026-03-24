@@ -1,0 +1,17 @@
+Next step (if this works):
+1.) Protect frontend routes (/dashboard)
+2.) Add real users (database)
+3.) Add passwords + hashing (bcrypt)
+4.) Persist Login Across Refresh
+5.) Logout + Session handling
+
+Redirect to a dashboard after login
+Hide/show UI based on login state
+Protect entire pages (not just API routes)
+
+Completed:
+- Full Login System with Protected Backend routes
+1.) Client <---> Server Communication 
+-- fixed fetch request, URL + port issues, and CORS errors 
+2.) React frontend can successfully talk to Express Backend
+-- 

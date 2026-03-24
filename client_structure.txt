@@ -1,0 +1,19 @@
+client/src/
+├── components/
+│   ├── Navbar.jsx
+│   └── Sidebar.jsx
+│
+├── pages/
+│   ├── Dashboard.jsx
+│   ├── Reports.jsx
+│   ├── Automations.jsx
+│   └── Login.jsx
+│
+├── layouts/
+│   └── DashboardLayout.jsx
+│
+├── services/
+│   └── api.js
+│
+├── hooks/
+│   └── useAuth.js

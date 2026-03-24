@@ -1,0 +1,17 @@
+server/
+├── controllers/
+│   └── reportController.js
+│
+├── routes/
+│   └── reportRoutes.js
+│
+├── models/
+│   └── User.js
+│   └── Company.js
+│
+├── middleware/
+│   └── authMiddleware.js
+│
+├── views/        # EJS site
+├── public/
+├── server.js
