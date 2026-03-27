@@ -1,12 +1,19 @@
 import { Navigate } from 'react-router-dom';
-import { getToken } from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProtectedRoute({ children }) {
-  const token = getToken();
+  const { user, loading } = useAuth();
 
-  if (!token) {
-    return <Navigate to="/" />;
+  // ⏳ Wait until auth is initialized
+  if (loading) {
+    return <p>Loading...</p>;
   }
 
+  // 🔒 Not logged in
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  // ✅ Authorized
   return children;
 }

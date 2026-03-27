@@ -1,9 +1,9 @@
-const BASE_URL = 'http://localhost:3000/api';
+const API_BASE = 'http://localhost:5000/api';
 
-export const apiFetch = async (endpoint, options = {}) => {
+export async function apiRequest(endpoint, options = {}) {
   const token = localStorage.getItem('token');
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -12,10 +12,16 @@ export const apiFetch = async (endpoint, options = {}) => {
     },
   });
 
-  // Optional: handle errors globally
-  if (!res.ok) {
-    throw new Error('API request failed');
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
   }
 
-  return res.json();
-};
+  if (!res.ok) {
+    throw new Error(data?.message || 'API Error');
+  }
+
+  return data;
+}
