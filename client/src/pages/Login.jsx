@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
-  const { login } = useAuth(); // ✅ use context
+  const { login, user } = useAuth(); // 👈 include user for debugging
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -13,13 +13,23 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      await login({ email, password }); // ✅ correct format
+    console.log("🚀 Login attempt:", { email });
 
-      // 🚀 SPA navigation (no reload)
+    try {
+      // 🔑 Attempt login
+      await login({ email, password });
+
+      console.log("✅ Login successful");
+
+      // 🧠 Check if user is set (important)
+      console.log("👤 User after login:", user);
+
+      // 🚀 Navigate to dashboard
+      console.log("➡️ Navigating to /dashboard");
       navigate('/dashboard');
 
     } catch (err) {
+      console.error("❌ Login failed:", err);
       setMessage(err.message || 'Login failed ❌');
     }
   };
@@ -49,7 +59,7 @@ export default function Login() {
       </form>
 
       <p>
-      Don't have an account? <a href="/register">Register</a>
+        Don't have an account? <Link to="/register">Register</Link>
       </p>
 
       {message && <p>{message}</p>}

@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import * as authService from '../services/auth';
 
@@ -12,7 +13,7 @@ export function AuthProvider({ children }) {
     async function loadUser() {
       try {
         const data = await authService.getMe();
-        setUser(data.user);
+        setUser(data.user || data);
       } catch (err) {
         // Token invalid or expired
         localStorage.removeItem('token');
@@ -30,7 +31,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.login(credentials); // token already stored
       const me = await authService.getMe();
-      setUser(me.user);
+      setUser(me.user || me);
     } catch (err) {
       throw err; // let UI handle error
     }

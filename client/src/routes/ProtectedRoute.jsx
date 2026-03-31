@@ -1,9 +1,10 @@
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-
+  console.log("User in ProtectedRoute:", user);
   // ⏳ Wait until auth is initialized
   if (loading) {
     return <p>Loading...</p>;

@@ -40,3 +40,8 @@ export function logout() {
 export function getToken() {
   return localStorage.getItem('token');
 }
+
+export async function getProtectedData() {
+  return apiRequest('/me');
+}
+

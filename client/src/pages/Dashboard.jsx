@@ -1,8 +1,10 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { getProtectedData, logout } from '../services/auth';
 
 export default function Dashboard() {
+  const { user } = useAuth(); // 🔥 use global user
+
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -29,11 +31,17 @@ export default function Dashboard() {
       <h1>Dashboard</h1>
       <p>You are successfully logged in 🎉</p>
 
+      {/* ✅ Use context user safely */}
+      <div>
+        <h2>Welcome, {user?.email} 👋</h2>
+        <p>User ID: {user?.id}</p>
+      </div>
+
+      {/* Optional: show protected data */}
       {data && (
         <div>
-          <h2>Welcome, {data.user.email} 👋</h2>
-          <p>User ID: {data.user.id}</p>
-          <p>Company ID: {data.user.companyId}</p>
+          <h3>Protected Data:</h3>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
       )}
 
