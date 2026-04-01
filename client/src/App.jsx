@@ -1,18 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import MainLayout from './layouts/MainLayout';
 
-
 function App() {
   const { loading } = useAuth();
 
-  // 🛑 Wait for auth to initialize
   if (loading) {
     return <p>Loading app...</p>;
   }
@@ -21,29 +22,30 @@ function App() {
     <Router>
       <Routes>
 
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* 🌐 PUBLIC LAYOUT */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
 
-        {/* Public routes */}
-        <Route 
-          path="/login" 
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          } 
-        />
-        
-        <Route 
-          path="/register" 
-          element={
-            <PublicRoute>
-              <Register />
-            </PublicRoute>
-          } 
-        />
+          <Route 
+            path="/login" 
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } 
+          />
 
-        {/* Protected route */}
+          <Route 
+            path="/register" 
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } 
+          />
+        </Route>
+
+        {/* 🔐 PROTECTED ROUTE */}
         <Route 
           path="/dashboard"
           element={

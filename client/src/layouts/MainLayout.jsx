@@ -1,13 +1,22 @@
 import React from 'react';
-import Navbar from './Navbar';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Outlet } from 'react-router-dom';
 
-export default function MainLayout({ children }) {
+export default function MainLayout() {
   return (
-    <div>
+    <>
       <Navbar />
-      <main style={{ padding: '20px' }}>
-        {children}
+      <main>
+        <Outlet />
       </main>
-    </div>
+      <Footer />
+    </>
   );
 }
+
+const styles = {
+  main: {
+    minHeight: '80vh',
+  },
+};
